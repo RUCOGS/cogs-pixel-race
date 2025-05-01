@@ -5,6 +5,8 @@ extends RefCounted
 var data: PackedByteArray2D
 var points: Dictionary[Vector2i, bool]
 var parent: MapRegion
+var children: Array[MapRegion]
+var fill_value: int = 1
 
 var size: Vector2i:
 	get:
@@ -15,6 +17,7 @@ func _init(points: Dictionary[Vector2i, bool], size: Vector2i) -> void:
 	self.data = PackedByteArray2D.new(size)
 	self.points = points
 	self.parent = null
+	self.children = []
 	for pos in points:
 		data.setv(pos, 1)
 
@@ -61,23 +64,22 @@ func get_inside() -> MapRegion:
 # Return a region that encircles the current region from the edges of the data
 func get_outside() -> MapRegion:
 	var visited = PackedByteArray2D.new(size)
-	print("get outside of ", self)
 	for y in range(size.y):
 		# Try create regions from left and right edges
 		var pos = Vector2i(0, y)
 		if pos not in self.points:
-			visit_region(pos, data, visited, 1)
+			visit_region(pos, data, visited, 0)
 		pos = Vector2i(size.x - 1, y)
 		if pos not in self.points:
-			visit_region(pos, data, visited, 1)
+			visit_region(pos, data, visited, 0)
 	for x in range(size.x):
 		# Try create regions from top and bottom edges
 		var pos = Vector2i(x, 0)
 		if pos not in self.points:
-			visit_region(pos, data, visited, 1)
+			visit_region(pos, data, visited, 0)
 		pos = Vector2i(x, size.y - 1)
 		if pos not in self.points:
-			visit_region(pos, data, visited, 1)
+			visit_region(pos, data, visited, 0)
 	# Now visited should contain all reachable positions from the edge
 	return MapRegion.from_data(visited)
 
@@ -87,7 +89,18 @@ func is_empty() -> bool:
 
 
 func _to_string() -> String:
-	return "MapRegion: (%s) {%s}" % [self.points.size(), self.data.to_string()]
+	return _to_string_tree()
+
+
+func _to_string_tree(depth: int = 0) -> String:
+	var str = "MapRegion: fill: %s (%s) {%s}\nChildren:" % [self.fill_value, self.points.size(), self.data.to_string()]
+	var lines = str.split("\n")
+	for i in range(lines.size()):
+		lines[i] = "    ".repeat(depth) + lines[i] 
+	str = "\n".join(lines)
+	for child in children:
+		str += child._to_string_tree(depth + 1)
+	return str
 
 
 func duplicate() -> MapRegion:
@@ -109,6 +122,31 @@ static func from_data(data: PackedByteArray2D) -> MapRegion:
 	return MapRegion.new(points, data.size)
 
 
+static func build_region_tree(data: PackedByteArray2D) -> MapRegion:
+	# The root has the entire data array set to 1s (Selected)
+	var root = MapRegion.from_size(data.size).get_negated()
+	root.fill_value = 0
+	var stack: Array[MapRegion] = [root]
+	while stack:
+		var region: MapRegion = stack.pop_back()
+		var visited = PackedByteArray2D.new(data.size)
+		var op_fill_value = 1 if region.fill_value == 0 else 0
+		# Iterate over region, and find next children regions (must have opposite fill value)
+		for point in region.points:
+			if visited.getv(point) != 1 and data.getv(point) == op_fill_value:
+				# Find new child region
+				var child_region = find_region(point, data, visited, op_fill_value).get_inside()
+				child_region.fill_value = op_fill_value
+				for child_point in child_region.points:
+					visited.setv(child_point, 1)
+				#print("visited: ", visited)
+				region.children.append(child_region)
+				stack.push_back(child_region)
+		#print("post visited: ", visited)
+	#print("\n\n\n\n")
+	return root
+
+
 static func find_regions(data: PackedByteArray2D) -> Array[MapRegion]:
 	var visited = PackedByteArray2D.new(data.size)
 	var regions: Array[MapRegion] = []
@@ -124,12 +162,12 @@ static func find_regions(data: PackedByteArray2D) -> Array[MapRegion]:
 
 const OFFSETS = [Vector2i.DOWN, Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT]
 
-static func find_region(start: Vector2i, data: PackedByteArray2D, visited: PackedByteArray2D, empty_value: int = 0) -> MapRegion:
+static func find_region(start: Vector2i, data: PackedByteArray2D, visited: PackedByteArray2D, fill_value: int = 1) -> MapRegion:
 	var stack = [start]
 	var region_data: Dictionary[Vector2i, bool] = {}
 	while stack:
 		var pos = stack.pop_back()
-		if not visited.in_bounds(pos) or visited.getv(pos) == 1 or data.getv(pos) == empty_value:
+		if not visited.in_bounds(pos) or visited.getv(pos) == 1 or data.getv(pos) != fill_value:
 			# Already visited
 			continue
 		# Not visited, mark as visited
@@ -140,12 +178,12 @@ static func find_region(start: Vector2i, data: PackedByteArray2D, visited: Packe
 	return MapRegion.new(region_data, data.size)
 
 
-static func visit_region(start: Vector2i, data: PackedByteArray2D, visited: PackedByteArray2D, empty_value: int = 0):
+static func visit_region(start: Vector2i, data: PackedByteArray2D, visited: PackedByteArray2D, fill_value: int = 1):
 	var stack = [start]
 	var region_data: Dictionary[Vector2i, bool] = {}
 	while stack:
 		var pos = stack.pop_back()
-		if not visited.in_bounds(pos) or visited.getv(pos) == 1 or data.getv(pos) == empty_value:
+		if not visited.in_bounds(pos) or visited.getv(pos) == 1 or data.getv(pos) != fill_value:
 			# Already visited
 			continue
 		# Not visited, mark as visited

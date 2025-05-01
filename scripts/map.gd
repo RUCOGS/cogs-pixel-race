@@ -11,12 +11,16 @@ func _ready() -> void:
 func create_colliders() -> void:
 	var image = sprite.texture.get_image()
 	var raw_alpha = PackedByteArray2D.from_image(image)
-	var found_region = MapRegion.find_region(Vector2i(6, 6), raw_alpha, PackedByteArray2D.new(raw_alpha.size))
-	print("found_region: ", found_region)
-	var outside_region = found_region.get_outside()
-	print("outside_region: ", outside_region)
-	var inside_region = found_region.get_inside()
-	print("inside_region: ", inside_region)
+	raw_alpha.apply(func(pos, x): return 1 if x > 0 else 0)
+	print("raw_alpha: ", raw_alpha)
+	var root = MapRegion.build_region_tree(raw_alpha)
+	print("root: ", root)
+	#var found_region = MapRegion.find_region(Vector2i(3, 3), raw_alpha, PackedByteArray2D.new(raw_alpha.size), 0)
+	#print("found_region: ", found_region)
+	#var outside_region = found_region.get_outside()
+	#print("outside_region: ", outside_region)
+	#var inside_region = found_region.get_inside()
+	#print("inside_region: ", inside_region)
 	#var regions = find_regions(raw_alpha)
 	#for child in get_children():
 		#if child is CollisionPolygon2D:

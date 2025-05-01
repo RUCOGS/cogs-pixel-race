@@ -52,6 +52,12 @@ func apply(callable: Callable):
 			setv(pos, callable.call(pos, getv(pos)))
 
 
+func duplicate() -> PackedByteArray2D:
+	var copy = PackedByteArray2D.new(size)
+	copy.array = array.duplicate()
+	return copy
+
+
 func _to_string() -> String:
 	var str = ["PackedInt32Array2D: [\n"]
 	for y in range(size.y):
