@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbj5iiddackrd"]
+
+[ext_resource type="Script" uid="uid://1s6po7luc75y" path="res://scripts/pixel_contestant.gd" id="1_lvsg5"]
+[ext_resource type="Texture2D" uid="uid://4eboixcnrjyh" path="res://assets/sprites/green.png" id="2_pnfbp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
+radius = 14.0
+
+[node name="PixelContestant" type="CharacterBody2D"]
+script = ExtResource("1_lvsg5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_pnfbp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1bvp3")

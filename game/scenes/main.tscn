@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://bx12pshdkvkvs"]
+
+[ext_resource type="Script" uid="uid://don53br8e0as7" path="res://scripts/map.gd" id="1_sugp2"]
+[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/map.png" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bbj5iiddackrd" path="res://prefabs/pixel_contestant.tscn" id="3_tbgi4"]
+
+[node name="Main" type="Node"]
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Map" type="StaticBody2D" parent="World" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_sugp2")
+sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Map"]
+texture = ExtResource("2_jyhfs")
+
+[node name="Camera2D" type="Camera2D" parent="World"]
+ignore_rotation = false
+zoom = Vector2(0.6, 0.6)
+
+[node name="PixelContestant" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-328, -220)
+
+[node name="PixelContestant2" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-402, -235)
+
+[node name="PixelContestant3" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-357, -318)
+
+[node name="PixelContestant4" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-262, -280)
+
+[node name="PixelContestant5" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-298, -342)
+
+[node name="PixelContestant6" parent="." instance=ExtResource("3_tbgi4")]
+position = Vector2(-376, -393)
