@@ -84,7 +84,7 @@ PackedVector2Array GeometryUtils::transform_polygon(Transform2D transform, Packe
 	Array new_points = Array();
 	for (auto point : polygon)
 	{
-		new_points.append(transform.basis_xform(point));
+		new_points.append(transform.xform(point));
 	}
 	return PackedVector2Array(new_points);
 }

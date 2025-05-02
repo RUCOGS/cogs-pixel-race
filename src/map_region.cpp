@@ -137,11 +137,9 @@ Array MapRegion::get_polygons(double epsilon)
 // Returns copy of current region with points negated
 Ref<MapRegion> MapRegion::get_negated()
 {
-	UtilityFunctions::print("get_negated()");
 	Ref<MapRegion> copy = MapRegion::from_size(size());
 	copy->apply([&](Vector2 pos, int x)
 							{ return points.has(pos) ? 0 : 1; });
-	UtilityFunctions::print("get_negated() - DONE");
 	return copy;
 }
 
@@ -149,16 +147,13 @@ Ref<MapRegion> MapRegion::get_negated()
 // AKA returns the region with its insides filled
 Ref<MapRegion> MapRegion::get_inside()
 {
-	UtilityFunctions::print("get_inside - pre get_outside()");
 	Ref<MapRegion> outside = get_outside();
-	UtilityFunctions::print("get_inside - pre get_negated()");
 	return outside->get_negated();
 }
 
 // Return a region that encircles the current region from the edges of the data
 Ref<MapRegion> MapRegion::get_outside()
 {
-	UtilityFunctions::print("get_outside()");
 	Ref<PackedByteArray2D> visited = PackedByteArray2D::from_size(size());
 	for (int y = 0; y < size().y; y += 1)
 	{
@@ -166,16 +161,10 @@ Ref<MapRegion> MapRegion::get_outside()
 		// Try create regions from left and right edges
 		Vector2i pos = Vector2i(0, y);
 		if (!points.has(pos))
-		{
-			UtilityFunctions::print("first_visit()");
 			visit_region(pos, data, visited, 0);
-			UtilityFunctions::print("first_visit() - DONE");
-		}
 		pos = Vector2i(size().x - 1, y);
 		if (!points.has(pos))
-		{
 			visit_region(pos, data, visited, 0);
-		}
 	}
 	for (int x = 0; x < size().x; x += 1)
 	{
@@ -183,17 +172,12 @@ Ref<MapRegion> MapRegion::get_outside()
 		// Try create regions from top and bottom edges
 		Vector2i pos = Vector2i(x, 0);
 		if (!points.has(pos))
-		{
 			visit_region(pos, data, visited, 0);
-		}
 		pos = Vector2i(x, size().y - 1);
 		if (!points.has(pos))
-		{
 			visit_region(pos, data, visited, 0);
-		}
 	}
 
-	UtilityFunctions::print("get_outside() - DONE");
 	// Now visited should contain all reachable positions from the edge
 	return MapRegion::from_data(visited);
 }
@@ -237,18 +221,15 @@ Ref<MapRegion> MapRegion::from_size(Vector2i size)
 
 Ref<MapRegion> MapRegion::from_points(PackedVector2Array points, Vector2i size)
 {
-	UtilityFunctions::print("MapRegion::from_points size: %s", size);
 	Ref<MapRegion> res;
 	res.instantiate();
 	res->data = PackedByteArray2D::from_size(size);
 	res->points.clear();
-	UtilityFunctions::print("		iter points");
 	for (auto point : points)
 	{
 		res->points.insert(point);
 		res->data->setv(point, 1);
 	}
-	UtilityFunctions::print("		DONE");
 	return res;
 }
 
@@ -275,40 +256,30 @@ Ref<MapRegion> MapRegion::build_region_tree(Ref<PackedByteArray2D> data)
 	root->fill_value = 0;
 	Array stack;
 	stack.push_back(root);
-	UtilityFunctions::print("build_region_tree:");
 	while (!stack.is_empty())
 	{
-		UtilityFunctions::print("		stack", stack);
 		Ref<MapRegion> region = stack.pop_back();
-		UtilityFunctions::print("		visited");
 		Ref<PackedByteArray2D> visited = PackedByteArray2D::from_size(data->get_size());
 		int op_fill_value = region->fill_value == 0 ? 1 : 0;
 
-		UtilityFunctions::print("		iter region->points");
 		// Iterate over region, and find next children regions (must have opposite fill value)
 		for (auto point : region->points)
 		{
 			if (visited->getv(point) != 1 && data->getv(point) == op_fill_value)
 			{
-				UtilityFunctions::print("		running find_region(%s)", point);
 				// Find new child region
 				Ref<MapRegion> child_region = find_region(point, data, visited, op_fill_value)->get_inside();
-				UtilityFunctions::print("		found child_region", child_region);
 				child_region->fill_value = op_fill_value;
 				for (auto child_point : child_region->points)
 				{
 					visited->setv(child_point, 1);
 				}
-				UtilityFunctions::print("		pre set _parent");
 				child_region->_parent = UtilityFunctions::weakref(region);
-				UtilityFunctions::print("		pre append children");
 				region->children.append(child_region);
-				UtilityFunctions::print("		post append children");
 				stack.push_back(child_region);
 			}
 		}
 	}
-	UtilityFunctions::print("build_region_tree: DONE");
 	return root;
 }
 
@@ -334,10 +305,8 @@ Vector2i MapRegion::OFFSETS[4] = {Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, 
 
 Ref<MapRegion> MapRegion::find_region(Vector2i start, Ref<PackedByteArray2D> data, Ref<PackedByteArray2D> visited, int fill_value)
 {
-	UtilityFunctions::print("find_region - stack:");
 	Array stack;
 	stack.push_back(start);
-	UtilityFunctions::print("find_region - region_data:");
 	HashSet<Vector2i> region_data;
 	while (!stack.is_empty())
 	{
@@ -348,24 +317,19 @@ Ref<MapRegion> MapRegion::find_region(Vector2i start, Ref<PackedByteArray2D> dat
 			continue;
 
 		// Not visited, mark as visited
-		// UtilityFunctions::print("		visiting");
 		visited->setv(pos, 1);
-		// UtilityFunctions::print("		inserting region_data");
 		region_data.insert(pos);
 		for (Variant offset : MapRegion::OFFSETS)
 			stack.push_back(pos + offset);
 	}
-	// UtilityFunctions::print("		finished");
 	PackedVector2Array points;
 	for (auto elem : region_data)
 		points.append(elem);
-	UtilityFunctions::print("		MapRegion::from_points");
 	return MapRegion::from_points(points, data->get_size());
 }
 
 void MapRegion::visit_region(Vector2i start, Ref<PackedByteArray2D> data, Ref<PackedByteArray2D> visited, int fill_value)
 {
-	UtilityFunctions::print("visit_region()");
 	Array stack;
 	stack.push_back(start);
 	HashSet<Vector2i> region_data;
@@ -382,7 +346,6 @@ void MapRegion::visit_region(Vector2i start, Ref<PackedByteArray2D> data, Ref<Pa
 		for (Variant offset : MapRegion::OFFSETS)
 			stack.push_back(pos + offset);
 	}
-	UtilityFunctions::print("visit_region() - DONE");
 }
 
 void MapRegion::_bind_methods()

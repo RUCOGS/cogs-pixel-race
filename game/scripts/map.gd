@@ -5,7 +5,7 @@ extends StaticBody2D
 
 
 func _ready() -> void:
-	create_colliders(0.1, 2.0)
+	create_colliders(0.5, 2.0)
 
 
 func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) -> void:

@@ -42,12 +42,12 @@ uint8_t PackedByteArray2D::try_getv(const Vector2i &pos)
 
 void PackedByteArray2D::setv(const Vector2i &pos, uint8_t value)
 {
-	array[pos.y * size.x + pos.x] = value;
+	array.set(pos.y * size.x + pos.x, value);
 }
 
 uint8_t PackedByteArray2D::getv(const Vector2i &pos)
 {
-	return array[pos.y * size.x + pos.x];
+	return array.get(pos.y * size.x + pos.x);
 }
 
 void PackedByteArray2D::apply(Callable callable)
