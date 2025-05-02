@@ -5,7 +5,7 @@ extends StaticBody2D
 
 
 func _ready() -> void:
-	create_colliders(0.1, 1.0)
+	create_colliders(0.1, 2.0)
 
 
 func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) -> void:
@@ -16,9 +16,10 @@ func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) ->
 	var image = sprite.texture.get_image().duplicate() as Image
 	image.resize(round(image.get_size().x * resolution), round(image.get_size().y * resolution), 0)
 	var raw_alpha = PackedByteArray2D.from_image(image)
+	
 	raw_alpha.apply(func(pos, x): return 1 if x > 0 else 0)
 	#print("raw_alpha: ", raw_alpha)
-			
+	
 	var root = MapRegion.build_region_tree(raw_alpha)
 	root.recache_polygon_tree(polygon_epsilon)
 	#print("root: ", root)
@@ -50,7 +51,7 @@ func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) ->
 				var collision_polygon = CollisionPolygon2D.new()
 				collision_polygon.polygon = GeometryUtils.transform_polygon(scale_transform, polygon)
 				add_child(collision_polygon)
-				collision_polygon.position -= (Vector2(region.size) / resolution) / 2
+				collision_polygon.position -= (Vector2(region.size()) / resolution) / 2
 		stack.append_array(region.children)
 
 

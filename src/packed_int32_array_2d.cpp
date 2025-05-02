@@ -6,18 +6,24 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/templates/vector.hpp>
 
-void PackedInt32Array2D::resize(Vector2i new_size)
+Vector2i PackedInt32Array2D::get_size()
 {
-	ERR_FAIL_COND_MSG(new_size.x > 0 && new_size.y > 0, "Expected new_size to be > 0");
+	return size;
+}
+
+void PackedInt32Array2D::resize(const Vector2i &new_size)
+{
+	ERR_FAIL_COND_MSG(new_size.x < 0 || new_size.y < 0, "Expected new_size to be > 0");
+	size = new_size;
 	array.resize(new_size.x * new_size.y);
 }
 
-bool PackedInt32Array2D::in_bounds(Vector2i pos)
+bool PackedInt32Array2D::in_bounds(const Vector2i &pos)
 {
 	return pos.x >= 0 && pos.y >= 0 && pos.x < size.x && pos.y < size.y;
 }
 
-bool PackedInt32Array2D::try_setv(Vector2i pos, int value)
+bool PackedInt32Array2D::try_setv(const Vector2i &pos, int32_t value)
 {
 	if (!in_bounds(pos))
 		return false;
@@ -27,21 +33,21 @@ bool PackedInt32Array2D::try_setv(Vector2i pos, int value)
 	// Returns value if value exists
 }
 
-int32_t PackedInt32Array2D::try_getv(Vector2i pos)
+int32_t PackedInt32Array2D::try_getv(const Vector2i &pos)
 {
 	if (!in_bounds(pos))
 		return -1;
 	return getv(pos);
 }
 
-void PackedInt32Array2D::setv(Vector2i pos, int value)
+void PackedInt32Array2D::setv(const Vector2i &pos, int32_t value)
 {
-	array[pos.y * size.x + pos.x] = value;
+	array.set(pos.y * size.x + pos.x, value);
 }
 
-int32_t PackedInt32Array2D::getv(Vector2i pos)
+int32_t PackedInt32Array2D::getv(const Vector2i &pos)
 {
-	return array[pos.y * size.x + pos.x];
+	return array.get(pos.y * size.x + pos.x);
 }
 
 void PackedInt32Array2D::apply(Callable callable)
@@ -63,7 +69,7 @@ Ref<PackedInt32Array2D> PackedInt32Array2D::duplicate()
 	return copy;
 }
 
-String PackedInt32Array2D::to_string()
+String PackedInt32Array2D::_to_string()
 {
 	PackedStringArray str = PackedStringArray{
 			/* initializer lists are unsupported */ "PackedInt32Array2D: [\n",
@@ -95,9 +101,10 @@ String PackedInt32Array2D::to_string()
 	return String().join(str);
 }
 
-Ref<BitMap> PackedInt32Array2D::to_bitmap(int cutoff)
+Ref<BitMap> PackedInt32Array2D::to_bitmap(int32_t cutoff)
 {
-	Ref<BitMap> bitmap = memnew(BitMap);
+	Ref<BitMap> bitmap;
+	bitmap.instantiate();
 	bitmap->create(size);
 	for (int y = 0; y < size.y; y += 1)
 	{
@@ -112,13 +119,13 @@ Ref<BitMap> PackedInt32Array2D::to_bitmap(int cutoff)
 
 Ref<PackedInt32Array2D> PackedInt32Array2D::from_size(Vector2i size)
 {
-	Ref<PackedInt32Array2D> ref = memnew(PackedInt32Array2D);
-	ref->size = size;
+	Ref<PackedInt32Array2D> ref;
+	ref.instantiate();
 	ref->resize(size);
 	return ref;
 }
 
-Ref<PackedInt32Array2D> PackedInt32Array2D::from_image(Ref<Image> image, String channel)
+Ref<PackedInt32Array2D> PackedInt32Array2D::from_image(const Ref<Image> image, String channel)
 {
 	Vector2i image_size = image->get_size();
 	Ref<PackedInt32Array2D> res = PackedInt32Array2D::from_size(image_size);
@@ -143,6 +150,8 @@ Ref<PackedInt32Array2D> PackedInt32Array2D::from_image(Ref<Image> image, String 
 
 void PackedInt32Array2D::_bind_methods()
 {
+	ClassDB::bind_method(D_METHOD("_to_string"), &PackedInt32Array2D::_to_string);
+	ClassDB::bind_method(D_METHOD("size"), &PackedInt32Array2D::get_size);
 	ClassDB::bind_method(D_METHOD("resize", "new_size"), &PackedInt32Array2D::resize);
 	ClassDB::bind_method(D_METHOD("in_bounds", "pos"), &PackedInt32Array2D::in_bounds);
 	ClassDB::bind_method(D_METHOD("try_setv", "pos", "value"), &PackedInt32Array2D::try_setv);
@@ -153,6 +162,6 @@ void PackedInt32Array2D::_bind_methods()
 	ClassDB::bind_method(D_METHOD("duplicate"), &PackedInt32Array2D::duplicate);
 	ClassDB::bind_method(D_METHOD("to_bitmap", "cutoff"), &PackedInt32Array2D::to_bitmap);
 
-	ClassDB::bind_static_method("PackedInt32Array2D", D_METHOD("from_image", "image", "channel"), &PackedInt32Array2D::from_image);
+	ClassDB::bind_static_method("PackedInt32Array2D", D_METHOD("from_image", "image", "channel"), &PackedInt32Array2D::from_image, DEFVAL(String("a")));
 	ClassDB::bind_static_method("PackedInt32Array2D", D_METHOD("from_size", "size"), &PackedInt32Array2D::from_size);
 }

@@ -2,6 +2,8 @@
 
 #include "packed_byte_array_2d.hpp"
 #include "packed_int32_array_2d.hpp"
+#include "geometry_utils.hpp"
+#include "map_region.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -16,6 +18,8 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 
 	GDREGISTER_RUNTIME_CLASS(PackedByteArray2D);
 	GDREGISTER_RUNTIME_CLASS(PackedInt32Array2D);
+	GDREGISTER_RUNTIME_CLASS(GeometryUtils);
+	GDREGISTER_RUNTIME_CLASS(MapRegion);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

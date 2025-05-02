@@ -6,18 +6,24 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/templates/vector.hpp>
 
-void PackedByteArray2D::resize(Vector2i new_size)
+Vector2i PackedByteArray2D::get_size()
 {
-	ERR_FAIL_COND_MSG(new_size.x > 0 && new_size.y > 0, "Expected new_size to be > 0");
+	return size;
+}
+
+void PackedByteArray2D::resize(const Vector2i &new_size)
+{
+	ERR_FAIL_COND_MSG(new_size.x < 0 || new_size.y < 0, "Expected new_size to be > 0");
+	size = new_size;
 	array.resize(new_size.x * new_size.y);
 }
 
-bool PackedByteArray2D::in_bounds(Vector2i pos)
+bool PackedByteArray2D::in_bounds(const Vector2i &pos)
 {
 	return pos.x >= 0 && pos.y >= 0 && pos.x < size.x && pos.y < size.y;
 }
 
-bool PackedByteArray2D::try_setv(Vector2i pos, int value)
+bool PackedByteArray2D::try_setv(const Vector2i &pos, uint8_t value)
 {
 	if (!in_bounds(pos))
 		return false;
@@ -27,19 +33,19 @@ bool PackedByteArray2D::try_setv(Vector2i pos, int value)
 	// Returns value if value exists
 }
 
-uint8_t PackedByteArray2D::try_getv(Vector2i pos)
+uint8_t PackedByteArray2D::try_getv(const Vector2i &pos)
 {
 	if (!in_bounds(pos))
-		return -1;
+		return 0;
 	return getv(pos);
 }
 
-void PackedByteArray2D::setv(Vector2i pos, int value)
+void PackedByteArray2D::setv(const Vector2i &pos, uint8_t value)
 {
 	array[pos.y * size.x + pos.x] = value;
 }
 
-uint8_t PackedByteArray2D::getv(Vector2i pos)
+uint8_t PackedByteArray2D::getv(const Vector2i &pos)
 {
 	return array[pos.y * size.x + pos.x];
 }
@@ -63,7 +69,7 @@ Ref<PackedByteArray2D> PackedByteArray2D::duplicate()
 	return copy;
 }
 
-String PackedByteArray2D::to_string()
+String PackedByteArray2D::_to_string()
 {
 	PackedStringArray str = PackedStringArray{
 			/* initializer lists are unsupported */ "PackedByteArray2D: [\n",
@@ -95,9 +101,10 @@ String PackedByteArray2D::to_string()
 	return String().join(str);
 }
 
-Ref<BitMap> PackedByteArray2D::to_bitmap(int cutoff)
+Ref<BitMap> PackedByteArray2D::to_bitmap(uint8_t cutoff)
 {
-	Ref<BitMap> bitmap = memnew(BitMap);
+	Ref<BitMap> bitmap;
+	bitmap.instantiate();
 	bitmap->create(size);
 	for (int y = 0; y < size.y; y += 1)
 	{
@@ -112,19 +119,19 @@ Ref<BitMap> PackedByteArray2D::to_bitmap(int cutoff)
 
 Ref<PackedByteArray2D> PackedByteArray2D::from_size(Vector2i size)
 {
-	Ref<PackedByteArray2D> ref = memnew(PackedByteArray2D);
-	ref->size = size;
+	Ref<PackedByteArray2D> ref;
+	ref.instantiate();
 	ref->resize(size);
 	return ref;
 }
 
-Ref<PackedByteArray2D> PackedByteArray2D::from_image(Ref<Image> image, String channel)
+Ref<PackedByteArray2D> PackedByteArray2D::from_image(const Ref<Image> image, String channel)
 {
 	Vector2i image_size = image->get_size();
 	Ref<PackedByteArray2D> res = PackedByteArray2D::from_size(image_size);
-	for (int y = 0; y < image_size.y; y += 1)
+	for (int y = 0; y < image_size.y; y++)
 	{
-		for (int x = 0; x < image_size.x; x += 1)
+		for (int x = 0; x < image_size.x; x++)
 		{
 			Vector2i pos = Vector2i(x, y);
 			Color color = image->get_pixelv(pos);
@@ -143,6 +150,8 @@ Ref<PackedByteArray2D> PackedByteArray2D::from_image(Ref<Image> image, String ch
 
 void PackedByteArray2D::_bind_methods()
 {
+	ClassDB::bind_method(D_METHOD("_to_string"), &PackedByteArray2D::_to_string);
+	ClassDB::bind_method(D_METHOD("size"), &PackedByteArray2D::get_size);
 	ClassDB::bind_method(D_METHOD("resize", "new_size"), &PackedByteArray2D::resize);
 	ClassDB::bind_method(D_METHOD("in_bounds", "pos"), &PackedByteArray2D::in_bounds);
 	ClassDB::bind_method(D_METHOD("try_setv", "pos", "value"), &PackedByteArray2D::try_setv);
@@ -153,6 +162,6 @@ void PackedByteArray2D::_bind_methods()
 	ClassDB::bind_method(D_METHOD("duplicate"), &PackedByteArray2D::duplicate);
 	ClassDB::bind_method(D_METHOD("to_bitmap", "cutoff"), &PackedByteArray2D::to_bitmap);
 
-	ClassDB::bind_static_method("PackedByteArray2D", D_METHOD("from_image", "image", "channel"), &PackedByteArray2D::from_image);
+	ClassDB::bind_static_method("PackedByteArray2D", D_METHOD("from_image", "image", "channel"), &PackedByteArray2D::from_image, DEFVAL(String("a")));
 	ClassDB::bind_static_method("PackedByteArray2D", D_METHOD("from_size", "size"), &PackedByteArray2D::from_size);
 }

@@ -14,29 +14,27 @@ using namespace godot;
 class PackedInt32Array2D : public RefCounted
 {
 	GDCLASS(PackedInt32Array2D, RefCounted);
-
-public:
 protected:
 	Vector2i size;
 	PackedInt32Array array;
 
 public:
+	Vector2i get_size();
+	void resize(const Vector2i &new_size);
+	bool in_bounds(const Vector2i &pos);
+	bool try_setv(const Vector2i &pos, int32_t value);
+	int32_t try_getv(const Vector2i &pos);
+	void setv(const Vector2i &pos, int32_t value);
+	int32_t getv(const Vector2i &pos);
 
-	void resize(Vector2i new_size);
-	bool in_bounds(Vector2i pos);
-	bool try_setv(Vector2i pos, int value);
-	int32_t try_getv(Vector2i pos);
-	void setv(Vector2i pos, int value);
-	int32_t getv(Vector2i pos);
-	
 	// callable = func(pos: Vector2i, x: int) -> int
 	void apply(Callable callable);
 	Ref<PackedInt32Array2D> duplicate();
-	String to_string();
-	Ref<BitMap> to_bitmap(int cutoff = 128);
+	String _to_string();
+	Ref<BitMap> to_bitmap(int32_t cutoff = 128);
 
 	static Ref<PackedInt32Array2D> from_size(Vector2i size);
-	static Ref<PackedInt32Array2D> from_image(Ref<Image> image, String channel = "a");
+	static Ref<PackedInt32Array2D> from_image(const Ref<Image> image, String channel = "a");
 	static void _bind_methods();
 };
 
