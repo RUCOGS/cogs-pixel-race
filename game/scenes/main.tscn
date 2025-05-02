@@ -1,18 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://bx12pshdkvkvs"]
+[gd_scene load_steps=6 format=3 uid="uid://bx12pshdkvkvs"]
 
 [ext_resource type="Script" uid="uid://don53br8e0as7" path="res://scripts/map.gd" id="1_sugp2"]
-[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/map.png" id="2_jyhfs"]
+[ext_resource type="Script" uid="uid://bvu03ja7lg6vt" path="res://scripts/world.gd" id="1_tbgi4"]
+[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/maps/map.png" id="2_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://nrv8p15vruqy" path="res://assets/sprites/white_pixel.png" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://bbj5iiddackrd" path="res://prefabs/pixel_contestant.tscn" id="3_tbgi4"]
 
 [node name="Main" type="Node"]
 
 [node name="World" type="Node2D" parent="."]
+script = ExtResource("1_tbgi4")
 
-[node name="Map" type="StaticBody2D" parent="World" node_paths=PackedStringArray("sprite")]
+[node name="Map" type="StaticBody2D" parent="World" node_paths=PackedStringArray("map_sprite", "bg_sprite")]
 script = ExtResource("1_sugp2")
-sprite = NodePath("Sprite2D")
+map_texture = ExtResource("2_jyhfs")
+bg_color = Color(0.227451, 0.266667, 0.4, 1)
+wall_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+map_sprite = NodePath("MapSprite")
+bg_sprite = NodePath("BGSprite")
 
-[node name="Sprite2D" type="Sprite2D" parent="World/Map"]
+[node name="BGSprite" type="Sprite2D" parent="World/Map"]
+modulate = Color(0.227451, 0.266667, 0.4, 1)
+z_index = -100
+scale = Vector2(1024, 1024)
+texture = ExtResource("3_jyhfs")
+
+[node name="MapSprite" type="Sprite2D" parent="World/Map"]
 texture = ExtResource("2_jyhfs")
 
 [node name="Camera2D" type="Camera2D" parent="World"]

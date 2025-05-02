@@ -1,0 +1,28 @@
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://fvjsx62awgto"]
+
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_mibv4"]
+resource_name = "Compressor"
+ratio = 2.0
+
+[sub_resource type="AudioEffectCompressor" id="AudioEffectCompressor_txsse"]
+resource_name = "Compressor"
+threshold = -5.0
+ratio = 8.0
+
+[resource]
+bus/1/name = &"SFX"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectCompressor_mibv4")
+bus/1/effect/0/enabled = true
+bus/2/name = &"MinorSFX"
+bus/2/solo = false
+bus/2/mute = false
+bus/2/bypass_fx = false
+bus/2/volume_db = -80.0
+bus/2/send = &"Master"
+bus/2/effect/0/effect = SubResource("AudioEffectCompressor_txsse")
+bus/2/effect/0/enabled = false

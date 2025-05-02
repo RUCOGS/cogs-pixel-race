@@ -24,4 +24,3 @@ func _save(resource: Resource, path: String, flags: int) -> Error:
 
 #func _set_uid(path: String, uid: int) -> Error:
 #	return OK
-

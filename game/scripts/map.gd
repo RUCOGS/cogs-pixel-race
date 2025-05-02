@@ -1,10 +1,40 @@
+@tool
 class_name Map
 extends StaticBody2D
 
-@export var sprite: Sprite2D
+@export var map_texture: Texture2D :
+	get:
+		return map_texture
+	set(value):
+		map_texture = value
+		if _readied:
+			if map_texture:
+				map_sprite.texture = map_texture
+				bg_sprite.scale = map_texture.get_size()
+			else:
+				map_sprite.texture = null
+				bg_sprite.scale = Vector2.ZERO
+@export var bg_color: Color :
+	get:
+		return bg_color
+	set(value):
+		bg_color = value
+		if _readied:
+			bg_sprite.modulate = value
+@export var wall_color: Color
+
+@export_group("Dependencies")
+@export var map_sprite: Sprite2D
+@export var bg_sprite: Sprite2D
+
+var _readied = false
 
 
 func _ready() -> void:
+	_readied = true
+	if Engine.is_editor_hint():
+		return
+	RenderingServer.set_default_clear_color(wall_color)
 	create_colliders(0.4, 2)
 
 
@@ -13,7 +43,7 @@ func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) ->
 		if child is CollisionPolygon2D:
 			child.queue_free()
 	
-	var image = sprite.texture.get_image().duplicate() as Image
+	var image = map_texture.get_image().duplicate() as Image
 	image.resize(round(image.get_size().x * resolution), round(image.get_size().y * resolution), 0)
 	var raw_alpha = PackedByteArray2D.from_image(image)
 	
@@ -53,27 +83,3 @@ func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) ->
 				add_child(collision_polygon)
 				collision_polygon.position -= (Vector2(region.size()) / resolution) / 2
 		stack.append_array(region.children)
-
-
-
-
-#
-## Returns list of points on the edge of the region
-#func get_region_edges(region: Dictionary[Vector2i, bool]) -> Dictionary[Vector2i, bool]:
-	#var edges: Dictionary[Vector2i, bool] = {}
-	#for pos in region:
-		#for offset in OFFSETS:
-			#var new_pos = pos + offset
-			#if new_pos not in region:
-				#edges[new_pos] = true
-	#return edges
-#
-#
-## Checks if region_a overlaps region_b
-## If a overlaps b, then the edges of a must all be surrounded by region_b
-#func is_region_overlaping(region_a: Dictionary[Vector2i, bool], region_b: Dictionary[Vector2i, bool]):
-	#var a_edges = get_region_edges(region_a)
-	#for pos in a_edges:
-		#if pos not in region_b:
-			#return false
-	#return true

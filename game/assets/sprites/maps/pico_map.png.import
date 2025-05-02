@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bt3uj0ql72nnt"
-path="res://.godot/imported/pico_map.png-a71c9fff7ed336024196408ad2ec162f.ctex"
+path="res://.godot/imported/pico_map.png-e8359139d9e3b91d5d4319d04486a1e3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/pico_map.png"
-dest_files=["res://.godot/imported/pico_map.png-a71c9fff7ed336024196408ad2ec162f.ctex"]
+source_file="res://assets/sprites/maps/pico_map.png"
+dest_files=["res://.godot/imported/pico_map.png-e8359139d9e3b91d5d4319d04486a1e3.ctex"]
 
 [params]
 
