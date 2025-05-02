@@ -5,38 +5,53 @@ extends StaticBody2D
 
 
 func _ready() -> void:
-	create_colliders()
+	create_colliders(0.1, 1.0)
 
 
-func create_colliders() -> void:
-	var image = sprite.texture.get_image()
+func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) -> void:
+	for child in get_children():
+		if child is CollisionPolygon2D:
+			child.queue_free()
+	
+	var image = sprite.texture.get_image().duplicate() as Image
+	image.resize(round(image.get_size().x * resolution), round(image.get_size().y * resolution), 0)
 	var raw_alpha = PackedByteArray2D.from_image(image)
 	raw_alpha.apply(func(pos, x): return 1 if x > 0 else 0)
-	print("raw_alpha: ", raw_alpha)
+	#print("raw_alpha: ", raw_alpha)
+			
 	var root = MapRegion.build_region_tree(raw_alpha)
-	print("root: ", root)
-	#var found_region = MapRegion.find_region(Vector2i(3, 3), raw_alpha, PackedByteArray2D.new(raw_alpha.size), 0)
-	#print("found_region: ", found_region)
-	#var outside_region = found_region.get_outside()
-	#print("outside_region: ", outside_region)
-	#var inside_region = found_region.get_inside()
-	#print("inside_region: ", inside_region)
-	#var regions = find_regions(raw_alpha)
-	#for child in get_children():
-		#if child is CollisionPolygon2D:
-			#child.queue_free()
-	#for region in regions:
-		#var bitmap = BitMap.new()
-		#bitmap.resize(raw_alpha.size)
-		#for pos in region:
-			#bitmap.set_bitv(pos, true)
-		#var polygons = bitmap.opaque_to_polygons(Rect2i(Vector2i.ZERO, bitmap.get_size()))
-		#for polygon in polygons:
-			#var collision_polygon = CollisionPolygon2D.new()
-			#collision_polygon.polygon = polygon
-			#add_child(collision_polygon)
-	#var new_texture = ImageTexture.create_from_image()
-	#sprite.texture = new_texture
+	root.recache_polygon_tree(polygon_epsilon)
+	#print("root: ", root)
+	
+	var stack = [root]
+	while stack:
+		var region = stack.pop_back() as MapRegion
+		if region.fill_value == 1:
+			var polygons = []
+			var right_polygons = [region.get_polygon()]
+			for child in region.children:
+				var new_right_polygons = []
+				for polygon in right_polygons:
+					var res = GeometryUtils.cut_polygon_along_line(polygon, child.get_center(), 0)
+					# Subtract child region from left and right polygons
+					
+					for lpoly in res[0]:
+						polygons.append_array(Geometry2D.clip_polygons(lpoly, child.get_polygon()))
+					for rpoly in res[1]:
+						new_right_polygons.append_array(Geometry2D.clip_polygons(rpoly, child.get_polygon()))
+				right_polygons = new_right_polygons
+			if right_polygons.size() > 0:
+				# Add leftover polygons
+				polygons.append_array(right_polygons)
+			#print("polygons (%s): %s" % [polygons.size(), polygons])
+			for polygon in polygons:
+				# Undo the shrinking (scaling up)
+				var scale_transform = Transform2D(0, Vector2.ONE / resolution, 0, Vector2.ZERO)
+				var collision_polygon = CollisionPolygon2D.new()
+				collision_polygon.polygon = GeometryUtils.transform_polygon(scale_transform, polygon)
+				add_child(collision_polygon)
+				collision_polygon.position -= (Vector2(region.size) / resolution) / 2
+		stack.append_array(region.children)
 
 
 

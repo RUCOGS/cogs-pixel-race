@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bx12pshdkvkvs"]
 
 [ext_resource type="Script" uid="uid://don53br8e0as7" path="res://scripts/map.gd" id="1_ig7tw"]
-[ext_resource type="Texture2D" uid="uid://bt3uj0ql72nnt" path="res://assets/sprites/pico_map.png" id="2_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/map.png" id="2_0xm2m"]
 
 [node name="Main" type="Node"]
 
@@ -16,4 +16,4 @@ texture = ExtResource("2_0xm2m")
 
 [node name="Camera2D" type="Camera2D" parent="World"]
 ignore_rotation = false
-zoom = Vector2(15, 15)
+zoom = Vector2(0.6, 0.6)

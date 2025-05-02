@@ -4,9 +4,17 @@ extends RefCounted
 
 var data: PackedByteArray2D
 var points: Dictionary[Vector2i, bool]
-var parent: MapRegion
+var parent: MapRegion:
+	get:
+		return _parent.get_ref()
+var _parent: WeakRef
 var children: Array[MapRegion]
 var fill_value: int = 1
+
+# null or PackedVector2Array
+var cached_polygon = null
+# null or Vector2
+var cached_center = null
 
 var size: Vector2i:
 	get:
@@ -45,6 +53,53 @@ func apply(callable: Callable):
 		for x in range(size.x):
 			var pos = Vector2i(x, y)
 			setv(pos, callable.call(pos, getv(pos)))
+
+
+func get_bitmap() -> BitMap:
+	var bitmap = BitMap.new()
+	bitmap.resize(size)
+	for pos in points:
+		bitmap.set_bitv(pos, true)
+	return bitmap
+
+
+func get_center() -> Vector2:
+	if cached_center:
+		return cached_center
+	recache_polygon()
+	return cached_center
+
+
+func recache_polygon(epsilon: float = 1.0) -> PackedVector2Array:
+	var polygons = get_polygons(epsilon)
+	if polygons.size() == 0:
+		cached_polygon = PackedVector2Array()
+	else:
+		cached_polygon = polygons[0]
+	cached_center = Vector2.ZERO
+	for pos in cached_polygon:
+		cached_center += pos
+	cached_center /= cached_polygon.size()
+	return cached_polygon
+
+
+# Recaches the entire MapRegion tree's polygons
+func recache_polygon_tree(epsilon: float = 1.0):
+	var stack = [self]
+	while stack:
+		var region = stack.pop_back() as MapRegion
+		region.recache_polygon(epsilon)
+		stack.append_array(region.children)
+
+
+func get_polygon(epsilon: float = 1.0) -> PackedVector2Array:
+	if cached_polygon:
+		return cached_polygon
+	return recache_polygon(epsilon)
+
+
+func get_polygons(epsilon: float = 1.0) -> Array[PackedVector2Array]:
+	return get_bitmap().opaque_to_polygons(Rect2i(Vector2i.ZERO, size), epsilon)
 
 
 # Returns copy of current region with points negated
@@ -97,7 +152,7 @@ func _to_string_tree(depth: int = 0) -> String:
 	var lines = str.split("\n")
 	for i in range(lines.size()):
 		lines[i] = "    ".repeat(depth) + lines[i] 
-	str = "\n".join(lines)
+	str = "\n".join(lines) + "\n"
 	for child in children:
 		str += child._to_string_tree(depth + 1)
 	return str
@@ -139,7 +194,7 @@ static func build_region_tree(data: PackedByteArray2D) -> MapRegion:
 				child_region.fill_value = op_fill_value
 				for child_point in child_region.points:
 					visited.setv(child_point, 1)
-				#print("visited: ", visited)
+				child_region._parent = weakref(region)
 				region.children.append(child_region)
 				stack.push_back(child_region)
 		#print("post visited: ", visited)
