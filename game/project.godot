@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 window/stretch/mode="viewport"
 
+[dotnet]
+
+project/assembly_name="cogs-pixel-race"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gdscript2all/plugin.cfg")

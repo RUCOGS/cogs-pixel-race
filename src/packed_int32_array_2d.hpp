@@ -7,46 +7,36 @@
 #include <godot_cpp/variant/dictionary.hpp>
 #include <godot_cpp/classes/bit_map.hpp>
 #include <godot_cpp/classes/image.hpp>
-#include <godot_cpp/classes/packed_byte_array2d.hpp>
-#include <godot_cpp/classes/packed_int32_array2d.hpp>
 #include <godot_cpp/classes/ref_counted.hpp>
 
 using namespace godot;
 
-class PackedInt32Array2D : public RefCounted {
+class PackedInt32Array2D : public RefCounted
+{
 	GDCLASS(PackedInt32Array2D, RefCounted);
-public:
 
+public:
 protected:
 	Vector2i size;
 	PackedInt32Array array;
 
 public:
-	void _init(Vector2i size) override;
 
 	void resize(Vector2i new_size);
-
 	bool in_bounds(Vector2i pos);
-// Returns null if value does not exist
 	bool try_setv(Vector2i pos, int value);
-
-	void try_getv(Vector2i pos);
-
+	int32_t try_getv(Vector2i pos);
 	void setv(Vector2i pos, int value);
-
-// callable = func(pos: Vector2i, x: int) -> int 
-	void getv(Vector2i pos);
-
+	int32_t getv(Vector2i pos);
+	
+	// callable = func(pos: Vector2i, x: int) -> int
 	void apply(Callable callable);
-
-	Ref<PackedByteArray2D> duplicate();
-
-	String _to_string() override;
-
+	Ref<PackedInt32Array2D> duplicate();
+	String to_string();
 	Ref<BitMap> to_bitmap(int cutoff = 128);
 
+	static Ref<PackedInt32Array2D> from_size(Vector2i size);
 	static Ref<PackedInt32Array2D> from_image(Ref<Image> image, String channel = "a");
-
 	static void _bind_methods();
 };
 

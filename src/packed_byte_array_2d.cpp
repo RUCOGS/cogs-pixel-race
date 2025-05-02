@@ -4,17 +4,11 @@
 #include <godot_cpp/core/object.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
-
-void PackedByteArray2D::_init(Vector2i size)
-{
-	this->set_size(size);
-	array = PackedByteArray();
-	resize(size);
-}
+#include <godot_cpp/templates/vector.hpp>
 
 void PackedByteArray2D::resize(Vector2i new_size)
 {
-	assert(new_size.x > 0 && new_size.y > 0);
+	ERR_FAIL_COND_MSG(new_size.x > 0 && new_size.y > 0, "Expected new_size to be > 0");
 	array.resize(new_size.x * new_size.y);
 }
 
@@ -25,23 +19,18 @@ bool PackedByteArray2D::in_bounds(Vector2i pos)
 
 bool PackedByteArray2D::try_setv(Vector2i pos, int value)
 {
-	if(!in_bounds(pos))
-	{
+	if (!in_bounds(pos))
 		return false;
-	}
 	setv(pos, value);
 	return true;
 
 	// Returns value if value exists
-
 }
 
-void PackedByteArray2D::try_getv(Vector2i pos)
+uint8_t PackedByteArray2D::try_getv(Vector2i pos)
 {
-	if(!in_bounds(pos))
-	{
-		return null;
-	}
+	if (!in_bounds(pos))
+		return -1;
 	return getv(pos);
 }
 
@@ -50,16 +39,16 @@ void PackedByteArray2D::setv(Vector2i pos, int value)
 	array[pos.y * size.x + pos.x] = value;
 }
 
-void PackedByteArray2D::getv(Vector2i pos)
+uint8_t PackedByteArray2D::getv(Vector2i pos)
 {
 	return array[pos.y * size.x + pos.x];
 }
 
 void PackedByteArray2D::apply(Callable callable)
 {
-	for(int y=0; y<size.y; y+=1)
+	for (int y = 0; y < size.y; y++)
 	{
-		for(int x=0; x<size.x; x+=1)
+		for (int x = 0; x < size.x; x++)
 		{
 			Vector2i pos = Vector2i(x, y);
 			setv(pos, callable.call(pos, getv(pos)));
@@ -69,48 +58,50 @@ void PackedByteArray2D::apply(Callable callable)
 
 Ref<PackedByteArray2D> PackedByteArray2D::duplicate()
 {
-	Variant copy = PackedByteArray2D->new(size);
+	Ref<PackedByteArray2D> copy = PackedByteArray2D::from_size(size);
 	copy->array = array.duplicate();
 	return copy;
 }
 
-String PackedByteArray2D::_to_string()
+String PackedByteArray2D::to_string()
 {
-	Array str = Array {/* initializer lists are unsupported */ "PackedByteArray2D: [\n",  };
-	for(int y=0; y<size.y; y+=1)
+	PackedStringArray str = PackedStringArray{
+			/* initializer lists are unsupported */ "PackedByteArray2D: [\n",
+	};
+	for (int y = 0; y < size.y; y++)
 	{
-		for(int x=0; x<size.x; x+=1)
+		for (int x = 0; x < size.x; x++)
 		{
-			Variant res = getv(Vector2i(x, y));
-			if(res != 0)
+			auto res = getv(Vector2i(x, y));
+			if (res != 0)
 			{
-				str.append("%3d" % res);
+				str.append(vformat("%3d", res));
 			}
 			else
 			{
 				str.append("   ");
 			}
-			if(x < size.x - 1)
+			if (x < size.x - 1)
 			{
 				str.append(" ");
 			}
 		}
-		if(y < size.y - 1)
+		if (y < size.y - 1)
 		{
 			str.append("\n");
 		}
 	}
 	str.append("]");
-	return "".join(str);
+	return String().join(str);
 }
 
 Ref<BitMap> PackedByteArray2D::to_bitmap(int cutoff)
 {
-	Variant bitmap = BitMap->new();
+	Ref<BitMap> bitmap = memnew(BitMap);
 	bitmap->create(size);
-	for(int y=0; y<size.y; y+=1)
+	for (int y = 0; y < size.y; y += 1)
 	{
-		for(int x=0; x<size.x; x+=1)
+		for (int x = 0; x < size.x; x += 1)
 		{
 			Vector2i pos = Vector2i(x, y);
 			bitmap->set_bitv(pos, getv(pos) >= cutoff);
@@ -119,38 +110,39 @@ Ref<BitMap> PackedByteArray2D::to_bitmap(int cutoff)
 	return bitmap;
 }
 
+Ref<PackedByteArray2D> PackedByteArray2D::from_size(Vector2i size)
+{
+	Ref<PackedByteArray2D> ref = memnew(PackedByteArray2D);
+	ref->size = size;
+	ref->resize(size);
+	return ref;
+}
+
 Ref<PackedByteArray2D> PackedByteArray2D::from_image(Ref<Image> image, String channel)
 {
 	Vector2i image_size = image->get_size();
-	Variant res = PackedByteArray2D->new(image_size);
-	for(int y=0; y<image_size.y; y+=1)
+	Ref<PackedByteArray2D> res = PackedByteArray2D::from_size(image_size);
+	for (int y = 0; y < image_size.y; y += 1)
 	{
-		for(int x=0; x<image_size.x; x+=1)
+		for (int x = 0; x < image_size.x; x += 1)
 		{
 			Vector2i pos = Vector2i(x, y);
 			Color color = image->get_pixelv(pos);
-			if(channel == "r")
-			{
-				res->setv(pos, color.r8);
-			}
-			else if(channel == "g")
-			{
-				res->setv(pos, color.g8);
-			}
-			else if(channel == "b")
-			{
-				res->setv(pos, color.b8);
-			}
-			else if(channel == "a")
-			{
-				res->setv(pos, color.a8);
-			}
+			if (channel == "r")
+				res->setv(pos, color.get_r8());
+			else if (channel == "g")
+				res->setv(pos, color.get_g8());
+			else if (channel == "b")
+				res->setv(pos, color.get_b8());
+			else if (channel == "a")
+				res->setv(pos, color.get_a8());
 		}
 	}
 	return res;
 }
 
-void PackedByteArray2D::_bind_methods() {
+void PackedByteArray2D::_bind_methods()
+{
 	ClassDB::bind_method(D_METHOD("resize", "new_size"), &PackedByteArray2D::resize);
 	ClassDB::bind_method(D_METHOD("in_bounds", "pos"), &PackedByteArray2D::in_bounds);
 	ClassDB::bind_method(D_METHOD("try_setv", "pos", "value"), &PackedByteArray2D::try_setv);
@@ -160,7 +152,7 @@ void PackedByteArray2D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("apply", "callable"), &PackedByteArray2D::apply);
 	ClassDB::bind_method(D_METHOD("duplicate"), &PackedByteArray2D::duplicate);
 	ClassDB::bind_method(D_METHOD("to_bitmap", "cutoff"), &PackedByteArray2D::to_bitmap);
-	ClassDB::bind_method(D_METHOD("from_image", "image", "channel"), &PackedByteArray2D::from_image);
 
+	ClassDB::bind_static_method("PackedByteArray2D", D_METHOD("from_image", "image", "channel"), &PackedByteArray2D::from_image);
+	ClassDB::bind_static_method("PackedByteArray2D", D_METHOD("from_size", "size"), &PackedByteArray2D::from_size);
 }
-
