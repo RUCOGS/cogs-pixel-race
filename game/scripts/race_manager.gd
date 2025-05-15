@@ -43,6 +43,7 @@ func _ready() -> void:
 	menu_ui.visible = true
 	game_ui.visible = false
 	win_ui.visible = false
+	get_window().size = Vector2i(1024, 1024)
 	_create_contestants()
 	start_button.pressed.connect(start_race)
 	map_option_button.clear()
@@ -86,7 +87,7 @@ func _on_map_selected(index: int):
 			contestants[i].global_position = spawn.global_position
 		else:
 			contestants[i].visible = false
-	camera.zoom = 1024 / map.map_texture.get_size().y * 0.5 * Vector2.ONE
+	camera.zoom = 1024 / map.map_texture.get_size().y * ProjectSettings.get_setting("display/window/size/viewport_height") / 1024 * Vector2.ONE
 	camera.global_position = Vector2.ZERO
 
 func _process(delta: float) -> void:
@@ -136,8 +137,12 @@ func _on_contestant_won(winner: PixelContestant):
 		.set_trans(Tween.TRANS_CUBIC)
 	mode = Mode.WIN
 	await get_tree().create_timer(1.0).timeout
+	if mode != Mode.WIN:
+		return
 	win_sfx.play()
 	await get_tree().create_timer(5.0).timeout
+	if mode != Mode.WIN:
+		return
 	get_tree().paused = false
 	end_race()
 
@@ -173,5 +178,6 @@ func end_race():
 	game_ui.visible = false
 	win_ui.visible = false
 	bgm.stop()
+	get_tree().paused = false
 	mode = Mode.IDLE
 	_on_map_selected(map_option_button.selected)

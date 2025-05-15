@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctg3gl5rsfhhy"]
+
+[ext_resource type="PackedScene" uid="uid://6fq1wt8yvprq" path="res://prefabs/base_map.tscn" id="1_7q1jx"]
+[ext_resource type="Texture2D" uid="uid://c0eg62tl0m2u4" path="res://assets/sprites/maps/map_4.png" id="2_7q1jx"]
+
+[node name="Map4" instance=ExtResource("1_7q1jx")]
+map_name = "caves2"
+map_texture = ExtResource("2_7q1jx")
+bg_color = Color(0.709804, 0.313726, 0.533333, 1)
+wall_color = Color(0.407843, 0.219608, 0.423529, 1)
+
+[node name="BGSprite" parent="." index="0"]
+modulate = Color(0.709804, 0.313726, 0.533333, 1)
+scale = Vector2(512, 512)
+
+[node name="MapSprite" parent="." index="1"]
+texture = ExtResource("2_7q1jx")
+
+[node name="ContestantSpawn" parent="Spawns" index="0"]
+position = Vector2(-181, -199)
+
+[node name="ContestantSpawn2" parent="Spawns" index="1"]
+position = Vector2(-141, -205)
+
+[node name="ContestantSpawn3" parent="Spawns" index="2"]
+position = Vector2(-200, -165)
+
+[node name="ContestantSpawn4" parent="Spawns" index="3"]
+position = Vector2(-157, -168)
+
+[node name="ContestantSpawn5" parent="Spawns" index="4"]
+position = Vector2(-188, -133)
+
+[node name="ContestantSpawn6" parent="Spawns" index="5"]
+position = Vector2(-116, -177)
+
+[node name="ContestantSpawn7" parent="Spawns" index="6"]
+position = Vector2(-149, -124)
+
+[node name="ContestantSpawn8" parent="Spawns" index="7"]
+position = Vector2(-113, -142)
+
+[node name="Goal" parent="Objects" index="0"]
+position = Vector2(-107, -23)

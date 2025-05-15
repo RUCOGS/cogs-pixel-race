@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bx12pshdkvkvs"]
+[gd_scene load_steps=23 format=3 uid="uid://bx12pshdkvkvs"]
 
 [ext_resource type="Script" uid="uid://bvu03ja7lg6vt" path="res://scripts/world.gd" id="1_ya4ey"]
 [ext_resource type="Script" uid="uid://bjdrwptqjlsce" path="res://scripts/race_settings.gd" id="3_85g3d"]
@@ -19,6 +19,8 @@
 [ext_resource type="PackedScene" uid="uid://b6ww0amu6j45q" path="res://prefabs/maps/map_1.tscn" id="13_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://dabgawbuv2s6e" path="res://prefabs/maps/map_2.tscn" id="14_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://cddakpqjwomda" path="res://prefabs/maps/map_3.tscn" id="17_muem4"]
+[ext_resource type="PackedScene" uid="uid://dgm7e1k8m8k3e" path="res://prefabs/contestants/green_pixel_contestant.tscn" id="17_yc10j"]
+[ext_resource type="PackedScene" uid="uid://ctg3gl5rsfhhy" path="res://prefabs/maps/map_4.tscn" id="20_gqmmt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ld40"]
 shader = ExtResource("3_dp3eg")
@@ -75,7 +77,7 @@ layout_mode = 2
 theme_type_variation = &"LargeLabel"
 theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
 theme_override_constants/outline_size = 9
-text = "cogs horse race..."
+text = "cogs pixel race..."
 
 [node name="DescLabel" type="Label" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
@@ -114,7 +116,6 @@ popup/item_0/text = "map 1"
 popup/item_0/id = 0
 
 [node name="GameUI" type="Control" parent="CanvasLayer"]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -196,7 +197,7 @@ horizontal_alignment = 1
 
 [node name="WinnerTextureRect" type="TextureRect" parent="CanvasLayer/WinUI/VBoxContainer"]
 material = SubResource("ShaderMaterial_0ld40")
-custom_minimum_size = Vector2(0, 400)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("8_trceg")
@@ -254,5 +255,6 @@ bus = &"BGM"
 
 [node name="RaceSettings" type="Node" parent="."]
 script = ExtResource("3_85g3d")
-sprite_contestants = Array[Texture2D]([ExtResource("6_ya4ey"), ExtResource("7_eb6dy"), ExtResource("8_trceg"), ExtResource("9_a8y0u"), ExtResource("10_jkv2x"), ExtResource("11_jbj1t")])
-maps = Array[PackedScene]([ExtResource("13_a8y0u"), ExtResource("14_jkv2x"), ExtResource("17_muem4")])
+sprite_contestants = Array[Texture2D]([ExtResource("6_ya4ey"), ExtResource("7_eb6dy"), ExtResource("8_trceg"), ExtResource("11_jbj1t"), ExtResource("9_a8y0u"), ExtResource("10_jkv2x")])
+custom_contestants = Array[PackedScene]([ExtResource("17_yc10j")])
+maps = Array[PackedScene]([ExtResource("13_a8y0u"), ExtResource("14_jkv2x"), ExtResource("17_muem4"), ExtResource("20_gqmmt")])

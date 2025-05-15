@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://1r7hlqx8v3bc" path="res://assets/sprites/maps/map_2.png" id="2_f43ie"]
 
 [node name="Map2" instance=ExtResource("1_ff1no")]
-map_name = "map2"
+map_name = "meadows"
 map_texture = ExtResource("2_f43ie")
 bg_color = Color(0.243137, 0.537255, 0.282353, 1)
 wall_color = Color(0.14902, 0.360784, 0.258824, 1)
