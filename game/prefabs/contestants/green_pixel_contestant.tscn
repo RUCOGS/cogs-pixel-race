@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgm7e1k8m8k3e"]
+
+[ext_resource type="PackedScene" uid="uid://bbj5iiddackrd" path="res://prefabs/base_pixel_contestant.tscn" id="1_far0w"]
+
+[node name="GreenPixelContestant" instance=ExtResource("1_far0w")]
+color = Color(0.388235, 0.780392, 0.301961, 1)

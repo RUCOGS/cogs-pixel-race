@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3 uid="uid://b862bq4bvl8f1"]
+
+[ext_resource type="Texture2D" uid="uid://c7inuyndbs2kp" path="res://assets/sprites/objects/carrot.png" id="1_436o8"]
+[ext_resource type="Script" uid="uid://dckn8jogpmp35" path="res://scripts/goal.gd" id="1_upenm"]
+[ext_resource type="AnimationLibrary" uid="uid://d1bw3ocwjrq5y" path="res://assets/animations/squishy.tres" id="2_5snnv"]
+[ext_resource type="Script" uid="uid://t5djflctsfsj" path="res://scripts/anim_flag_player.gd" id="4_i7yi7"]
+[ext_resource type="Script" uid="uid://brifssw0lgpji" path="res://scripts/anim_flag_player_clip.gd" id="5_ii53u"]
+
+[sub_resource type="Resource" id="Resource_hyp5p"]
+script = ExtResource("5_ii53u")
+animation = "squishy/idle"
+flags = ""
+metadata/_custom_type_script = "uid://brifssw0lgpji"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5snnv"]
+radius = 16.0
+
+[node name="Goal" type="Area2D"]
+script = ExtResource("1_upenm")
+
+[node name="Visuals" type="Node2D" parent="."]
+position = Vector2(0, -1)
+scale = Vector2(1.05, 0.95)
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals"]
+texture = ExtResource("1_436o8")
+
+[node name="AnimFlagPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"squishy": ExtResource("2_5snnv")
+}
+script = ExtResource("4_i7yi7")
+clips = Array[ExtResource("5_ii53u")]([SubResource("Resource_hyp5p")])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_5snnv")

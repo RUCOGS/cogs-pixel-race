@@ -1,16 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://6fq1wt8yvprq"]
+[gd_scene load_steps=6 format=3 uid="uid://6fq1wt8yvprq"]
 
 [ext_resource type="Script" uid="uid://don53br8e0as7" path="res://scripts/map.gd" id="1_0o778"]
-[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/maps/map.png" id="2_adxd4"]
+[ext_resource type="Texture2D" uid="uid://dm52672en6jty" path="res://assets/sprites/maps/map_1.png" id="2_adxd4"]
 [ext_resource type="Texture2D" uid="uid://nrv8p15vruqy" path="res://assets/sprites/white_pixel.png" id="3_ccydk"]
+[ext_resource type="PackedScene" uid="uid://bcwvc42qt75j" path="res://prefabs/objects/contestant_spawn.tscn" id="4_fpgk8"]
+[ext_resource type="PackedScene" uid="uid://b862bq4bvl8f1" path="res://prefabs/objects/goal.tscn" id="4_tr3hi"]
 
-[node name="Map" type="StaticBody2D" node_paths=PackedStringArray("map_sprite", "bg_sprite")]
+[node name="Map" type="StaticBody2D" node_paths=PackedStringArray("map_sprite", "bg_sprite", "spawns_container", "goal")]
 script = ExtResource("1_0o778")
 map_texture = ExtResource("2_adxd4")
 bg_color = Color(0.227451, 0.266667, 0.4, 1)
 wall_color = Color(0.0941176, 0.0784314, 0.145098, 1)
 map_sprite = NodePath("MapSprite")
 bg_sprite = NodePath("BGSprite")
+spawns_container = NodePath("Spawns")
+goal = NodePath("Objects/Goal")
 
 [node name="BGSprite" type="Sprite2D" parent="."]
 modulate = Color(0.227451, 0.266667, 0.4, 1)
@@ -20,3 +24,34 @@ texture = ExtResource("3_ccydk")
 
 [node name="MapSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_adxd4")
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="ContestantSpawn" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-340, -374)
+
+[node name="ContestantSpawn2" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-377, -327)
+
+[node name="ContestantSpawn3" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-315, -325)
+
+[node name="ContestantSpawn4" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-396, -271)
+
+[node name="ContestantSpawn5" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-387, -212)
+
+[node name="ContestantSpawn6" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-326, -209)
+
+[node name="ContestantSpawn7" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-263, -301)
+
+[node name="ContestantSpawn8" parent="Spawns" instance=ExtResource("4_fpgk8")]
+position = Vector2(-258, -244)
+
+[node name="Objects" type="Node2D" parent="."]
+
+[node name="Goal" parent="Objects" instance=ExtResource("4_tr3hi")]
+position = Vector2(292, 318)

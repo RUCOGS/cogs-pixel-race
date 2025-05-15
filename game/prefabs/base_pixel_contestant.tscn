@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://bbj5iiddackrd"]
+[gd_scene load_steps=18 format=3 uid="uid://bbj5iiddackrd"]
 
 [ext_resource type="Script" uid="uid://1s6po7luc75y" path="res://scripts/pixel_contestant.gd" id="1_lvsg5"]
 [ext_resource type="Texture2D" uid="uid://4eboixcnrjyh" path="res://assets/sprites/contestants/green.png" id="2_pnfbp"]
+[ext_resource type="AnimationLibrary" uid="uid://d1bw3ocwjrq5y" path="res://assets/animations/squishy.tres" id="3_3kiv6"]
 [ext_resource type="Script" uid="uid://qfqmehq66k28" path="res://scripts/anim_flag_player_fx.gd" id="3_p8tfe"]
 [ext_resource type="Script" uid="uid://t5djflctsfsj" path="res://scripts/anim_flag_player.gd" id="3_pgr73"]
 [ext_resource type="Script" uid="uid://ceykxuuhgcl0a" path="res://scripts/fx.gd" id="3_pnfbp"]
@@ -12,197 +13,28 @@
 [ext_resource type="AudioStream" uid="uid://dmidcwvbv2ax4" path="res://assets/sfx/walk_2.wav" id="6_p8tfe"]
 [ext_resource type="AudioStream" uid="uid://cn46xb3fo7mb8" path="res://assets/sfx/walk_3.wav" id="7_pgr73"]
 [ext_resource type="AudioStream" uid="uid://b6o75gg0yrhmt" path="res://assets/sfx/walk_4.wav" id="8_y6u77"]
+[ext_resource type="FontFile" uid="uid://bq8rayre3b7hh" path="res://assets/fonts/Wendy-Neue.ttf" id="14_5rktu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1bvp3"]
 radius = 14.0
 
-[sub_resource type="Animation" id="Animation_pnfbp"]
-length = 0.001
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:position:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:position:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Visuals:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Visuals:scale:x")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Visuals:scale:y")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
-[sub_resource type="Animation" id="Animation_nam2c"]
-resource_name = "hit"
-length = 0.5
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:scale:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(3, 3, 3),
-"points": PackedFloat32Array(1, -0.0134669, 0.0429159, 0.0134669, -0.0429159, 0.8, -0.059982, -0.00235158, 0.059982, 0.00235158, 1, -0.0575956, -0.00176358, 0.0575956, 0.00176358),
-"times": PackedFloat32Array(0, 0.103359, 0.299566)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:scale:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(3, 0, 3),
-"points": PackedFloat32Array(1, -0.0134669, -0.0847442, 0.0134669, 0.0847442, 1.2, -0.0627052, -0.0017637, 0.0273015, -0.132589, 1, -0.05, 0, 0.05, 0),
-"times": PackedFloat32Array(0, 0.103242, 0.3)
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Visuals:position:y")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(3, 3, 3),
-"points": PackedFloat32Array(-1, -0.0370483, 0, 0.0370483, 0, -1.97764, -0.059496, 0.0100181, 0.059496, -0.0100181, -1, -0.0499528, 0, 0.0499528, 0),
-"times": PackedFloat32Array(0, 0.0899475, 0.348005)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Visuals:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(3, 3, 0),
-"points": PackedFloat32Array(0, -0.0449945, 0, 0.0449945, 0, 0.0971463, -0.0449945, 0, 0.0449945, 0, 0, -0.0461579, 0, 0.0461579, 0),
-"times": PackedFloat32Array(0, 0.130618, 0.4098)
-}
-
-[sub_resource type="Animation" id="Animation_lvsg5"]
-resource_name = "idle"
-loop_mode = 1
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:position:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0, 0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.244477, 0.5)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:position:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(3, 3, 3),
-"points": PackedFloat32Array(-1, -0.148204, -0.0123224, 0.148204, 0.0123224, 1, -0.238161, -0.0306669, 0.238161, 0.0306669, -1, -0.147135, 0.0209662, 0.147135, -0.0209662),
-"times": PackedFloat32Array(0, 0.540362, 1.03333)
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Visuals:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 3, 3),
-"points": PackedFloat32Array(0, -0.25, 0, 0.0948645, 0.0902886, 0.0136097, -0.158216, 0.143527, 0.158216, -0.143527, 0, -0.0716829, -0.0702784, 0.0716829, 0.0702784),
-"times": PackedFloat32Array(0, 0.521421, 1)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Visuals:scale:x")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(3, 3, 3),
-"points": PackedFloat32Array(1.05, -0.125, 0, 0.125, 0, 0.951629, -0.178002, 0.000404775, 0.178002, -0.000404775, 1.05, -0.118887, 0, 0.118887, 0),
-"times": PackedFloat32Array(0.286883, 0.644831, 1.01475)
-}
-tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Visuals:scale:y")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"handle_modes": PackedInt32Array(0, 0, 3),
-"points": PackedFloat32Array(0.95, -0.125, 0, 0.125, 0, 1.04878, -0.191845, 0, 0.191845, 0, 0.95, -0.125, 0, 0.125, 0),
-"times": PackedFloat32Array(0.24665, 0.636674, 1)
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_nam2c"]
-_data = {
-&"RESET": SubResource("Animation_pnfbp"),
-&"hit": SubResource("Animation_nam2c"),
-&"idle": SubResource("Animation_lvsg5")
-}
-
 [sub_resource type="Resource" id="Resource_y6u77"]
 script = ExtResource("4_y6u77")
-animation = "hit"
+animation = "squishy/hit"
 flags = "hit"
 metadata/_custom_type_script = "uid://brifssw0lgpji"
 
 [sub_resource type="Resource" id="Resource_tnttg"]
 script = ExtResource("4_y6u77")
-animation = "idle"
+animation = "squishy/idle"
 flags = ""
 metadata/_custom_type_script = "uid://brifssw0lgpji"
 
-[node name="PixelContestant" type="CharacterBody2D"]
+[node name="PixelContestant" type="CharacterBody2D" node_paths=PackedStringArray("name_label")]
 script = ExtResource("1_lvsg5")
+icon = ExtResource("2_pnfbp")
 angle_jitter = Vector2(-60, 60)
+name_label = NodePath("NameLabel")
 
 [node name="Visuals" type="Node2D" parent="."]
 
@@ -214,17 +46,19 @@ shape = SubResource("CircleShape2D_1bvp3")
 
 [node name="AnimFlagPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_nam2c")
+&"squishy": ExtResource("3_3kiv6")
 }
 script = ExtResource("3_pgr73")
 oneshot_flags = "hit"
 clips = Array[ExtResource("4_y6u77")]([SubResource("Resource_y6u77"), SubResource("Resource_tnttg")])
 
-[node name="WalkFX" type="Node" parent="."]
+[node name="WalkFX" type="Node" parent="." node_paths=PackedStringArray("cond_target")]
 script = ExtResource("3_pnfbp")
 duration = Vector2(1, 0.5)
 is_looping = true
 play_on_awake = true
+cond_target = NodePath("..")
+cond_property = "active"
 
 [node name="WalkSFX" type="AudioStreamPlayer" parent="WalkFX"]
 bus = &"MinorSFX"
@@ -248,5 +82,22 @@ script = ExtResource("3_p8tfe")
 anim_flag_player = NodePath("../../AnimFlagPlayer")
 set_flags = "hit"
 metadata/_custom_type_script = "uid://qfqmehq66k28"
+
+[node name="NameLabel" type="Label" parent="."]
+z_index = 50
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -34.0
+offset_top = 15.0
+offset_right = 35.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("14_5rktu")
+theme_override_font_sizes/font_size = 8
+text = "The quick"
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [connection signal="bumped" from="." to="BumpFX" method="play"]

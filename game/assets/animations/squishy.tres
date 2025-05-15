@@ -1,0 +1,173 @@
+[gd_resource type="AnimationLibrary" load_steps=4 format=3 uid="uid://d1bw3ocwjrq5y"]
+
+[sub_resource type="Animation" id="Animation_pnfbp"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals:scale:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals:scale:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_nam2c"]
+resource_name = "hit"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(3, 3, 3),
+"points": PackedFloat32Array(1, -0.0134669, 0.0429159, 0.0134669, -0.0429159, 0.8, -0.059982, -0.00235158, 0.059982, 0.00235158, 1, -0.0575956, -0.00176358, 0.0575956, 0.00176358),
+"times": PackedFloat32Array(0, 0.103359, 0.299566)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(3, 0, 3),
+"points": PackedFloat32Array(1, -0.0134669, -0.0847442, 0.0134669, 0.0847442, 1.2, -0.0627052, -0.0017637, 0.0273015, -0.132589, 1, -0.05, 0, 0.05, 0),
+"times": PackedFloat32Array(0, 0.103242, 0.3)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(3, 3, 3),
+"points": PackedFloat32Array(-1, -0.0370483, 0, 0.0370483, 0, -1.97764, -0.059496, 0.0100181, 0.059496, -0.0100181, -1, -0.0499528, 0, 0.0499528, 0),
+"times": PackedFloat32Array(0, 0.0899475, 0.348005)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(3, 3, 0),
+"points": PackedFloat32Array(0, -0.0449945, 0, 0.0449945, 0, 0.0971463, -0.0449945, 0, 0.0449945, 0, 0, -0.0461579, 0, 0.0461579, 0),
+"times": PackedFloat32Array(0, 0.130618, 0.4098)
+}
+
+[sub_resource type="Animation" id="Animation_lvsg5"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.244477, 0.5)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(3, 3, 3),
+"points": PackedFloat32Array(-1, -0.148204, -0.0123224, 0.148204, 0.0123224, 1, -0.238161, -0.0306669, 0.238161, 0.0306669, -1, -0.147135, 0.0209662, 0.147135, -0.0209662),
+"times": PackedFloat32Array(0, 0.540362, 1.03333)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 3, 3),
+"points": PackedFloat32Array(0, -0.25, 0, 0.0948645, 0.0902886, 0.0136097, -0.158216, 0.143527, 0.158216, -0.143527, 0, -0.0716829, -0.0702784, 0.0716829, 0.0702784),
+"times": PackedFloat32Array(0, 0.521421, 1)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals:scale:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(3, 3, 3),
+"points": PackedFloat32Array(1.05, -0.125, 0, 0.125, 0, 0.951629, -0.178002, 0.000404775, 0.178002, -0.000404775, 1.05, -0.118887, 0, 0.118887, 0),
+"times": PackedFloat32Array(0.286883, 0.644831, 1.01475)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals:scale:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0, 3),
+"points": PackedFloat32Array(0.95, -0.125, 0, 0.125, 0, 1.04878, -0.191845, 0, 0.191845, 0, 0.95, -0.125, 0, 0.125, 0),
+"times": PackedFloat32Array(0.24665, 0.636674, 1)
+}
+
+[resource]
+_data = {
+&"RESET": SubResource("Animation_pnfbp"),
+&"hit": SubResource("Animation_nam2c"),
+&"idle": SubResource("Animation_lvsg5")
+}

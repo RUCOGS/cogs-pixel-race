@@ -15,6 +15,8 @@ signal finished
 @export var play_on_awake: bool = false
 
 @export_group("Dependencies")
+@export var cond_target: Node
+@export var cond_property: String
 @export var fxes: Array[FX]
 @export var sfxes: Array[SFX]
 @export var anim_flag_player_fxes: Array[AnimFlagPlayerFX]
@@ -75,6 +77,16 @@ func play():
 
 
 func stop():
+	for fx in fxes:
+		fx.stop()
+	for sfx in sfxes:
+		sfx.stop()
+	for player in audio_stream_players:
+		player.stop()
+	for particle in cpu_particles:
+		particle.emitting = false
+	for particle in gpu_particles:
+		particle.emitting = false
 	is_playing = false
 	finished.emit()
 	if free_on_finished:
@@ -82,6 +94,8 @@ func stop():
 
 
 func _process(delta: float) -> void:
+	if cond_target and cond_property in cond_target:
+		is_playing = cond_target.get(cond_property)
 	if is_playing:
 		time -= delta
 		if time <= 0:

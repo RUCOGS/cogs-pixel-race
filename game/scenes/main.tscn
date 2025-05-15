@@ -1,34 +1,258 @@
-[gd_scene load_steps=4 format=3 uid="uid://bx12pshdkvkvs"]
+[gd_scene load_steps=21 format=3 uid="uid://bx12pshdkvkvs"]
 
-[ext_resource type="Script" uid="uid://bvu03ja7lg6vt" path="res://scripts/world.gd" id="1_tbgi4"]
-[ext_resource type="PackedScene" uid="uid://6fq1wt8yvprq" path="res://prefabs/base_map.tscn" id="2_sugp2"]
-[ext_resource type="PackedScene" uid="uid://bbj5iiddackrd" path="res://prefabs/base_pixel_contestant.tscn" id="3_tbgi4"]
+[ext_resource type="Script" uid="uid://bvu03ja7lg6vt" path="res://scripts/world.gd" id="1_ya4ey"]
+[ext_resource type="Script" uid="uid://bjdrwptqjlsce" path="res://scripts/race_settings.gd" id="3_85g3d"]
+[ext_resource type="Script" uid="uid://oi5mq17023ba" path="res://scripts/race_manager.gd" id="3_choun"]
+[ext_resource type="Shader" uid="uid://gtfnnfjol5dg" path="res://assets/shaders/outline.gdshader" id="3_dp3eg"]
+[ext_resource type="Theme" uid="uid://thgyl2fpayap" path="res://assets/custom_theme.tres" id="4_tbgi4"]
+[ext_resource type="Script" uid="uid://cd0bs1kvdwm2i" path="res://scripts/outlined_node.gd" id="5_0ld40"]
+[ext_resource type="AudioStream" uid="uid://dyj1pysvv1l7m" path="res://assets/sfx/win_cheering.mp3" id="6_trceg"]
+[ext_resource type="Texture2D" uid="uid://cs307ag2423vu" path="res://assets/sprites/contestants/cheeto_puffs.png" id="6_ya4ey"]
+[ext_resource type="Texture2D" uid="uid://cv3ye1xf8bpcs" path="res://assets/sprites/contestants/hot_cheeto.png" id="7_eb6dy"]
+[ext_resource type="AudioStream" uid="uid://ypw5ktw2s02w" path="res://assets/sfx/start.wav" id="7_jbj1t"]
+[ext_resource type="AudioStream" uid="uid://b0q35use0hj56" path="res://assets/sfx/astral_observatory_lofi_by_helynt.mp3" id="7_jkv2x"]
+[ext_resource type="Texture2D" uid="uid://cobwonr82cl6c" path="res://assets/sprites/contestants/pocky.png" id="8_trceg"]
+[ext_resource type="Texture2D" uid="uid://c3frf7xyw78dh" path="res://assets/sprites/contestants/rbpinked.png" id="9_a8y0u"]
+[ext_resource type="Texture2D" uid="uid://bwnrs5sb62swl" path="res://assets/sprites/contestants/smoothie.png" id="10_jkv2x"]
+[ext_resource type="Texture2D" uid="uid://cs3aa7ry2av16" path="res://assets/sprites/contestants/watermelon.png" id="11_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://dsgsxei47reid" path="res://prefabs/contestants/sprite_pixel_contestant.tscn" id="12_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://b6ww0amu6j45q" path="res://prefabs/maps/map_1.tscn" id="13_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://dabgawbuv2s6e" path="res://prefabs/maps/map_2.tscn" id="14_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://cddakpqjwomda" path="res://prefabs/maps/map_3.tscn" id="17_muem4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ld40"]
+shader = ExtResource("3_dp3eg")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/transparency = 1.0
 
 [node name="Main" type="Node"]
 
 [node name="World" type="Node2D" parent="."]
-script = ExtResource("1_tbgi4")
+script = ExtResource("1_ya4ey")
 
-[node name="Map" parent="World" instance=ExtResource("2_sugp2")]
+[node name="Contesants" type="Node2D" parent="World"]
 
 [node name="Camera2D" type="Camera2D" parent="World"]
 ignore_rotation = false
 zoom = Vector2(0.6, 0.6)
 
-[node name="PixelContestant" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-328, -220)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="PixelContestant2" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-402, -235)
+[node name="MenuUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_tbgi4")
 
-[node name="PixelContestant3" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-357, -318)
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MenuUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="PixelContestant4" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-262, -280)
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MenuUI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="PixelContestant5" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-298, -342)
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
 
-[node name="PixelContestant6" parent="World" instance=ExtResource("3_tbgi4")]
-position = Vector2(-376, -393)
+[node name="TitleLabel" type="Label" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LargeLabel"
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "cogs horse race..."
+
+[node name="DescLabel" type="Label" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "select a map and press start when you are ready. use ESC to exit a race."
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="StartButton" type="Button" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "START"
+
+[node name="MapSelect" type="HSplitContainer" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+collapsed = true
+
+[node name="DescLabel2" type="Label" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer/MapSelect"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "MAP"
+
+[node name="MapOptionButton" type="OptionButton" parent="CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer/MapSelect"]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "map 1"
+popup/item_0/id = 0
+
+[node name="GameUI" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_tbgi4")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/GameUI"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GameUI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TimerLabel" type="Label" parent="CanvasLayer/GameUI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "10:24:23"
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/GameUI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "RACE"
+
+[node name="WinUI" type="Control" parent="CanvasLayer"]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_tbgi4")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/WinUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0971, 0.081, 0.15, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/WinUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/WinUI/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LargeLabel"
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 16
+text = "W I N N E R"
+horizontal_alignment = 1
+
+[node name="WinnerTextureRect" type="TextureRect" parent="CanvasLayer/WinUI/VBoxContainer"]
+material = SubResource("ShaderMaterial_0ld40")
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("8_trceg")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("5_0ld40")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/WinUI/VBoxContainer"]
+layout_mode = 2
+
+[node name="WinnerNameLabel" type="Label" parent="CanvasLayer/WinUI/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"LargeLabel"
+theme_override_colors/font_outline_color = Color(0.0941176, 0.0784314, 0.145098, 1)
+theme_override_constants/outline_size = 9
+text = "jovial_merryment"
+horizontal_alignment = 1
+
+[node name="RaceManager" type="Node" parent="." node_paths=PackedStringArray("timer_label", "name_label", "race_settings", "start_button", "menu_ui", "game_ui", "win_ui", "win_contestant_texture_rect", "win_color_rect", "win_name_label", "win_sfx", "start_sfx", "bgm", "map_option_button", "world", "camera", "contestants_container")]
+process_mode = 3
+script = ExtResource("3_choun")
+timer_label = NodePath("../CanvasLayer/GameUI/MarginContainer/HBoxContainer/TimerLabel")
+name_label = NodePath("../CanvasLayer/GameUI/MarginContainer/HBoxContainer/NameLabel")
+race_settings = NodePath("../RaceSettings")
+start_button = NodePath("../CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer/StartButton")
+menu_ui = NodePath("../CanvasLayer/MenuUI")
+game_ui = NodePath("../CanvasLayer/GameUI")
+win_ui = NodePath("../CanvasLayer/WinUI")
+win_contestant_texture_rect = NodePath("../CanvasLayer/WinUI/VBoxContainer/WinnerTextureRect")
+win_color_rect = NodePath("../CanvasLayer/WinUI/ColorRect")
+win_name_label = NodePath("../CanvasLayer/WinUI/VBoxContainer/VBoxContainer/WinnerNameLabel")
+win_sfx = NodePath("WinSFX")
+start_sfx = NodePath("StartSFX")
+bgm = NodePath("BGM")
+map_option_button = NodePath("../CanvasLayer/MenuUI/MarginContainer/VBoxContainer/HBoxContainer/MapSelect/MapOptionButton")
+world = NodePath("../World")
+camera = NodePath("../World/Camera2D")
+contestants_container = NodePath("../World/Contesants")
+sprite_contestant_prefab = ExtResource("12_eb6dy")
+
+[node name="WinSFX" type="AudioStreamPlayer" parent="RaceManager"]
+stream = ExtResource("6_trceg")
+volume_db = -1.522
+bus = &"SFX"
+
+[node name="StartSFX" type="AudioStreamPlayer" parent="RaceManager"]
+stream = ExtResource("7_jbj1t")
+volume_db = 4.0
+bus = &"SFX"
+
+[node name="BGM" type="AudioStreamPlayer" parent="RaceManager"]
+stream = ExtResource("7_jkv2x")
+volume_db = -12.077
+bus = &"BGM"
+
+[node name="RaceSettings" type="Node" parent="."]
+script = ExtResource("3_85g3d")
+sprite_contestants = Array[Texture2D]([ExtResource("6_ya4ey"), ExtResource("7_eb6dy"), ExtResource("8_trceg"), ExtResource("9_a8y0u"), ExtResource("10_jkv2x"), ExtResource("11_jbj1t")])
+maps = Array[PackedScene]([ExtResource("13_a8y0u"), ExtResource("14_jkv2x"), ExtResource("17_muem4")])

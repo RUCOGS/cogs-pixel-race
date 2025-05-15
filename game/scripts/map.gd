@@ -2,6 +2,11 @@
 class_name Map
 extends StaticBody2D
 
+
+signal contestant_won(contestant: PixelContestant)
+
+
+@export var map_name: String
 @export var map_texture: Texture2D :
 	get:
 		return map_texture
@@ -23,9 +28,14 @@ extends StaticBody2D
 			bg_sprite.modulate = value
 @export var wall_color: Color
 
+var spawns: Array[ContestantSpawn] = []
+
+
 @export_group("Dependencies")
 @export var map_sprite: Sprite2D
 @export var bg_sprite: Sprite2D
+@export var spawns_container: Node2D
+@export var goal: Goal
 
 var _readied = false
 
@@ -35,7 +45,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	RenderingServer.set_default_clear_color(wall_color)
+	spawns.append_array(spawns_container.get_children())
 	create_colliders(0.4, 2)
+	goal.contestant_won.connect(contestant_won.emit)
 
 
 func create_colliders(resolution: float = 0.05, polygon_epsilon: float = 1.0) -> void:

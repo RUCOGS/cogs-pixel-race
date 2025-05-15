@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dsgsxei47reid"]
+
+[ext_resource type="PackedScene" uid="uid://bbj5iiddackrd" path="res://prefabs/base_pixel_contestant.tscn" id="1_32kr5"]
+[ext_resource type="Script" uid="uid://ixao8u6snysi" path="res://scripts/sprite_constructor.gd" id="2_3qpis"]
+
+[node name="SpritePixelContestant" instance=ExtResource("1_32kr5")]
+
+[node name="SpriteConstructor" type="Node" parent="." index="5" node_paths=PackedStringArray("sprite", "pixel_contestant")]
+script = ExtResource("2_3qpis")
+sprite = NodePath("../Visuals/Sprite2D")
+pixel_contestant = NodePath("..")
