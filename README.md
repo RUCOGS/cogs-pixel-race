@@ -19,6 +19,25 @@ git submodule update --recursive
 scons
 ```
 
+> [!NOTE]
+> 
+> The custom `GDExtension` must be built for every type of platform you'd like to export to, as well as the target, which is either debug or release.
+>
+> The difference between debug and release targets occurs when you check the "Export With Debug" option when you export the project. If this option is checked, then the game will be in debug mode, and contain extra information and logging useful for debugging your exported game. If it's unchecked, then the game will strip out any debug information, making the game smaller. However, this makes the game harder to debug if it crashes.
+> 
+> By default, running `scons` will build a debug build for your computer's platform.
+> You can specify the platform using `platform=<platform>` flag, and you can specify the target using the `target=<target>` flag.
+>
+> **Ex.** the following command builds the `GDExtension` for windows release builds.
+> ```bash
+> scons platform=windows target=template_release
+> ```
+> **Ex.** the following command builds the `GDExtension` for windows debug builds.
+> ```bash
+> scons platform=windows target=template_debug
+> ```
+> You can find more information on the [buildsystem page](https://docs.godotengine.org/en/stable/contributing/development/compiling/introduction_to_the_buildsystem.html) and the [gdextension example page](https://docs.godotengine.org/en/stable/tutorials/scripting/gdextension/gdextension_cpp_example.html) on the Godot documentation.
+
 ## Creating Maps
               
 To create a custom map, create a new inherited scene of the `base_map.tscn` by right clicking on the `base_map.tscn` and selecting "New Inherited Scene". Then, place the newly created scene inside the `prefabs/maps` folder, and then add to the list of maps in the RaceSettings node in `main.tscn`.
